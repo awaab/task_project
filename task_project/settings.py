@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'task_app',
     'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,14 @@ STATICFILES_DIRS = (
 
 AUTH_USER_MODEL = "task_app.CustomUser"
 CORS_ORIGIN_ALLOW_ALL = True
-SESSION_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 
