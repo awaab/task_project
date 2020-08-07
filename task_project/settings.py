@@ -25,7 +25,7 @@ SECRET_KEY = 'o$iq*!%s%ch@r(zzxeqdr1p%scf=n)*e39xqq_+)o&p$yg^!u0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-assess-task.herokuapp.com', "localhost"]
 
 
 # Application definition
