@@ -1,26 +1,14 @@
 import json
-from django.http import HttpResponse
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.middleware.csrf import get_token
 from django.shortcuts import render
-from rest_framework.views import APIView
-from django.contrib.auth import get_user_model
-from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.decorators import login_required
 from .serializers import UserSerializer
-from rest_framework import viewsets
 
-# from django.shortcuts import render_to_response
 User = get_user_model()
-#from django.core.context_processors import csrf
-from django.template import RequestContext
 
 
 def logged_in_view(request):
-    print(request.user)
     if request.user.is_authenticated:
         username = request.user.username
         content = {'user': username}
@@ -29,13 +17,8 @@ def logged_in_view(request):
         return JsonResponse({'message': "Not logged in"}, status=403)
 
 
-@csrf_protect
 def index(request):
-    csrfContext = RequestContext(request).__dict__
-    return render(request, 'index.html', csrfContext)
-
-def csrf(request):
-    return JsonResponse({'csrfToken': get_token(request)})
+    return render(request, 'index.html')
 
 def sign_up_view(request):
     post_data = json.loads(request.body)
