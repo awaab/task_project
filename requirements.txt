@@ -3,3 +3,4 @@ django-cors-headers
 djangorestframework
 whitenoise
 gunicorn
+django-heroku
