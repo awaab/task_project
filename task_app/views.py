@@ -4,6 +4,8 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render
 from .serializers import UserSerializer
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.template import RequestContext
 
 User = get_user_model()
 
@@ -16,9 +18,10 @@ def logged_in_view(request):
     else:
         return JsonResponse({'message': "Not logged in"}, status=403)
 
-
+@ensure_csrf_cookie
 def index(request):
-    return render(request, 'index.html')
+    csrfContext = RequestContext(request).__dict__
+    return render(request, 'index.html', csrfContext)
 
 def sign_up_view(request):
     post_data = json.loads(request.body)

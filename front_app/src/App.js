@@ -32,13 +32,19 @@ setLoggedIn = (logged_in) =>{
     logged_in: false,
     status: 'login',
   };
-  setCsrfToken();
+  
     axios.post(logged_in_check_url)
       .then(response => {
       console.log(response);
       this.setLoggedIn(true);
       this.setStatus("logged_in");
-  });
+      setCsrfToken();
+  }).catch(err => {
+    // what now?
+    console.log(err);
+    setCsrfToken();
+});
+
 }
 setStatus = (status)=>{
   this.setState({status: status})
