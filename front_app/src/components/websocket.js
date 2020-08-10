@@ -18,7 +18,8 @@ setupWebSocket = () =>{
       this.ws.onmessage = (evt) => {
         const data = JSON.parse(evt.data);
         this.props.setStatus(data.message);
-        console.log(typeof(data));
+        // Remove message and display default
+        setTimeout(this.props.setStatus("CONNECTED"), 2000);
       }
   
       this.ws.onclose = () => {
@@ -29,9 +30,7 @@ setupWebSocket = () =>{
 }
     
   componentDidMount() {
-    //this.ws = new WebSocket(socketPath);
-    this.setupWebSocket();
-    
+    this.setupWebSocket();    
   }
 
   render() {
