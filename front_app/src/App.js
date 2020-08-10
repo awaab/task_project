@@ -1,8 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import LoginForm from './components/login.js'
-import Profile from './components/profile.js'
+import LoginForm from './components/login.js';
+import Profile from './components/profile.js';
+import WebsocketComponent from './components/websocket.js';
 import axios from 'axios';
 import getCookie from './cookie';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -59,7 +60,7 @@ setStatus = (status)=>{
             {this.state.status == "changing" && "Sending details to server"}
             </h3>
        {!this.state.logged_in && <LoginForm setLoggedIn={this.setLoggedIn} setStatus={this.setStatus}/>}
-       {this.state.logged_in && <Profile setLoggedIn={this.setLoggedIn} setStatus={this.setStatus}/>}
+       {this.state.logged_in && <div><WebsocketComponent/><Profile setLoggedIn={this.setLoggedIn} setStatus={this.setStatus}/></div>}
       </div>
     );
   }

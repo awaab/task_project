@@ -6,7 +6,8 @@ from django.shortcuts import render
 from .serializers import UserSerializer
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template import RequestContext
-
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 User = get_user_model()
 
 
@@ -16,7 +17,7 @@ def logged_in_view(request):
         content = {'user': username}
         return JsonResponse(content)
     else:
-        return JsonResponse({'message': "Not logged in"}, status=403)
+        return JsonResponse({'message': "Unauthorized"}, status=401)
 
 @ensure_csrf_cookie
 def index(request):
@@ -38,6 +39,8 @@ def sign_up_view(request):
 
 
 def logout_view(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'message': "Unauthorized"}, status=401)
     username = request.user.username
     content = {'logged_out_user': username}
     logout(request)
@@ -56,15 +59,29 @@ def login_view(request):
         return JsonResponse({'message': 'logged in!','user':user.username}, status=200)
     else:
         # Return an 'invalid login' error message.
-        return JsonResponse({'message': 'Eror'}, status=401)
+        return JsonResponse({'message': 'Bad login'}, status=400)
 
 def user_info(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'message': "Unauthorized"}, status=401)
     current_user = request.user
     print(current_user)
     serializer = UserSerializer(current_user)
     return JsonResponse(serializer.data)
 
 def user_edit(request):
+    group_name = f'user-status-{str(request.user.id)}'
+    channel_layer = get_channel_layer()
+    print(channel_layer)
+    async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                "type": "notify",
+                "content": "USER EDIT",
+            }
+        )
+    if not request.user.is_authenticated:
+        return JsonResponse({'message': "Unauthorized"}, status=401)
     data = json.loads(request.body)
     non_empty_data = {}
     for key in data:
