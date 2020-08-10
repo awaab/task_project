@@ -13,7 +13,6 @@ setupWebSocket = () =>{
     this.ws.onopen = () => {
         console.log('ws connected');
         this.props.setStatus("CONNECTED");
-        this.ws.send(JSON.stringify({abcd:"abcd"}));
       }
   
       this.ws.onmessage = (evt) => {

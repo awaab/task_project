@@ -8,6 +8,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template import RequestContext
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.views.decorators.http import require_http_methods
 
 DISCONNECTED_MSG = "DISCONNECTED"
 CHANGED_DETAILS_MSG = "CHANGED_DETAILS"
@@ -26,6 +27,7 @@ def index(request):
     csrfContext = RequestContext(request).__dict__
     return render(request, 'index.html', csrfContext)
 
+@require_http_methods(["POST"])
 def sign_up_view(request):
     post_data = json.loads(request.body)
     form = CustomUserCreationForm(post_data)
@@ -38,7 +40,7 @@ def sign_up_view(request):
         return JsonResponse({'message': 'logged in!','user':user.username}, status=200)
     return JsonResponse({'message': 'Username/password invalid or already registered.'}, status=400)
 
-
+@require_http_methods(["POST"])
 def logout_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({'message': "Unauthorized"}, status=401)
@@ -48,6 +50,7 @@ def logout_view(request):
     logout(request)
     return JsonResponse(content)
 
+@require_http_methods(["POST"])
 def login_view(request):
     post_data = json.loads(request.body)
     username = post_data['username']
@@ -66,6 +69,7 @@ def user_info(request):
     serializer = UserSerializer(current_user)
     return JsonResponse(serializer.data)
 
+@require_http_methods(["POST"])
 def user_edit(request):
     if not request.user.is_authenticated:
         return JsonResponse({'message': "Unauthorized"}, status=401)

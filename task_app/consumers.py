@@ -1,7 +1,6 @@
 import json
 from django.contrib.auth.models import AnonymousUser
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from channels.exceptions import StopConsumer
 from .views import  DISCONNECTED_MSG
 
 class StatusConsumer(AsyncJsonWebsocketConsumer):
@@ -37,4 +36,3 @@ class StatusConsumer(AsyncJsonWebsocketConsumer):
         except AttributeError:
             print(AttributeError.__str__)
         await self.close()
-        raise StopConsumer()
