@@ -73,7 +73,6 @@ def user_info(request):
 def user_edit(request):
     if not request.user.is_authenticated:
         return JsonResponse({'message': "Unauthorized"}, status=401)
-    send_user_channel(request.user.id, CHANGED_DETAILS_MSG)
     data = json.loads(request.body)
     non_empty_data = {}
     for key in data:
@@ -82,6 +81,7 @@ def user_edit(request):
     serializer = UserSerializer(request.user, data=non_empty_data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
+    send_user_channel(request.user.id, CHANGED_DETAILS_MSG)
     return JsonResponse(serializer.data)
 
 def send_user_channel(user_id, message):
