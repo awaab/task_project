@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { type } from 'jquery';
 
-const socketPath = 'ws://' + window.location.host + "/ws/status/";
+const socketPath = 'wss://' + window.location.host + "/ws/status/";
 //const socketPath = 'ws://echo.websocket.org/';
 
 class WebsocketComponent extends Component {
