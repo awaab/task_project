@@ -36,4 +36,5 @@ class StatusConsumer(AsyncJsonWebsocketConsumer):
             )
         except AttributeError:
             print(AttributeError.__str__)
+        await self.close()
         raise StopConsumer()
