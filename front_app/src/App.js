@@ -19,7 +19,6 @@ axios.defaults.withCredentials = true;
 function setCsrfToken() {
   let _csrfToken=getCookie("csrftoken");
   axios.defaults.headers.common['X-CSRFTOKEN'] = _csrfToken;
-  console.log(_csrfToken,"_csrfToken")
   }
 
 class App extends React.Component{
@@ -36,19 +35,15 @@ setLoggedIn = (logged_in) =>{
   
     axios.post(logged_in_check_url)
       .then(response => {
-      console.log(response);
       this.setLoggedIn(true);
       this.setStatus("logged_in");
       setCsrfToken();
   }).catch(err => {
-    // what now?
-    console.log(err);
     setCsrfToken();
 });
 
 }
 setStatus = (status)=>{
-  console.log("************ changng to:",status);
   this.setState({status: status});
 }
   render() {

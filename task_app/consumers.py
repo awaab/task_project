@@ -7,14 +7,12 @@ from .views import  DISCONNECTED_MSG
 class StatusConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
-        print(self.user,"*****")
         if not self.user.is_authenticated:
             await self.close()
         else:
             self.user_room_name = f'user-status-{str(self.user.id)}'
             await self.channel_layer.group_add(self.user_room_name, self.channel_name)
             await self.accept()
-            print("################")
 
     async def receive_json(self, content, **kwargs):
         """

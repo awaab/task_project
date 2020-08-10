@@ -14,7 +14,6 @@ class LoginForm extends React.Component {
  }
     handleLogin = (event) =>{
       event.preventDefault();
-      console.log(event.target.name.value)
       const data = {
             password: event.target.password.value,
             username: event.target.username.value,
@@ -22,7 +21,6 @@ class LoginForm extends React.Component {
       axios.post(login_url, data, )
       .then(res => {
         const resp_data = res.data;
-        console.log(resp_data);
         this.props.setLoggedIn(true);
         this.props.setStatus("logged_in");
       })

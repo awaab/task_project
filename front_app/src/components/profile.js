@@ -45,7 +45,6 @@ class Profile extends React.Component {
   event.target.email.value="";
   axios.post(submit_data_url, data)
   .then(response => {
-  console.log(response);
   this.setUserdata(response.data);
 });
  }
@@ -53,14 +52,12 @@ class Profile extends React.Component {
       event.preventDefault();
       axios.post(logged_out_url)
       .then(response => {
-      console.log(response);
       this.props.setLoggedIn(false);
   });
     }
     checkLoggedin = (event) =>{
       axios.post(logged_in_check_url)
       .then(response => {
-      console.log(response);
       this.setLoggedIn(true);
   });
     }

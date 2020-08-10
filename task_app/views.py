@@ -9,7 +9,6 @@ from django.template import RequestContext
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
-User = get_user_model()
 DISCONNECTED_MSG = "DISCONNECTED"
 CHANGED_DETAILS_MSG = "CHANGED_DETAILS"
 CONNECTED_MSG = "CONNECTED"
@@ -29,7 +28,6 @@ def index(request):
 
 def sign_up_view(request):
     post_data = json.loads(request.body)
-    print(post_data)
     form = CustomUserCreationForm(post_data)
     if form.is_valid():
         form.save()
@@ -48,28 +46,23 @@ def logout_view(request):
     username = request.user.username
     content = {'logged_out_user': username}
     logout(request)
-    print(request.user)
     return JsonResponse(content)
 
 def login_view(request):
     post_data = json.loads(request.body)
     username = post_data['username']
     password = post_data['password']
-    #print("credintials",username,password)
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        # Redirect to a success page.
         return JsonResponse({'message': 'logged in!','user':user.username}, status=200)
     else:
-        # Return an 'invalid login' error message.
         return JsonResponse({'message': 'Bad login'}, status=400)
 
 def user_info(request):
     if not request.user.is_authenticated:
         return JsonResponse({'message': "Unauthorized"}, status=401)
     current_user = request.user
-    print(current_user)
     serializer = UserSerializer(current_user)
     return JsonResponse(serializer.data)
 
