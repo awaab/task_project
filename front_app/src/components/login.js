@@ -42,7 +42,6 @@ class LoginForm extends React.Component {
           .then(res => {
             const resp_data = res.data;
             this.props.setLoggedIn(true);
-        this.props.setStatus("logged_in");
           })
     }
   

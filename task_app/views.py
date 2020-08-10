@@ -8,8 +8,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template import RequestContext
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-User = get_user_model()
 
+User = get_user_model()
+DISCONNECTED_MSG = "DISCONNECTED"
+CHANGED_DETAILS_MSG = "CHANGED_DETAILS"
+CONNECTED_MSG = "CONNECTED"
 
 def logged_in_view(request):
     if request.user.is_authenticated:
@@ -41,6 +44,7 @@ def sign_up_view(request):
 def logout_view(request):
     if not request.user.is_authenticated:
         return JsonResponse({'message': "Unauthorized"}, status=401)
+    send_user_channel(request.user.id, DISCONNECTED_MSG)
     username = request.user.username
     content = {'logged_out_user': username}
     logout(request)
@@ -70,18 +74,9 @@ def user_info(request):
     return JsonResponse(serializer.data)
 
 def user_edit(request):
-    group_name = f'user-status-{str(request.user.id)}'
-    channel_layer = get_channel_layer()
-    print(channel_layer)
-    async_to_sync(channel_layer.group_send)(
-            group_name,
-            {
-                "type": "notify",
-                "content": "USER EDIT",
-            }
-        )
     if not request.user.is_authenticated:
         return JsonResponse({'message': "Unauthorized"}, status=401)
+    send_user_channel(request.user.id, CHANGED_DETAILS_MSG)
     data = json.loads(request.body)
     non_empty_data = {}
     for key in data:
@@ -91,3 +86,14 @@ def user_edit(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return JsonResponse(serializer.data)
+
+def send_user_channel(user_id, message):
+    group_name = f'user-status-{str(user_id)}'
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+            group_name,
+            {
+                "type": "notify",
+                "content": message,
+            }
+    )

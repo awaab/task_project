@@ -34,13 +34,12 @@
 
 #     async def notify(self, event):
 #         await self.send_json(event["content"])
-
-from django.contrib.auth.models import AnonymousUser
-
-from channels.generic.websocket import JsonWebsocketConsumer
 import json
+from django.contrib.auth.models import AnonymousUser
+from channels.generic.websocket import JsonWebsocketConsumer
 from asgiref.sync import async_to_sync
-
+from channels.exceptions import StopConsumer
+from .views import  DISCONNECTED_MSG
 
 class StatusConsumer(JsonWebsocketConsumer):
     def connect(self):
@@ -58,18 +57,22 @@ class StatusConsumer(JsonWebsocketConsumer):
         """
         This handles data sent over the wire from the client.
         """
-        print(content.get("abcd"))
-        # Send message to room group
-        async_to_sync(self.send_json({'message': "message"}))
-        # async_to_sync(self.channel_layer.group_send)(
-        #     self.user_room_name,
-        #     {
-        #         "type": "notify",
-        #         "content": "USER EDIT!!!",
-        #     }
-        # )
+        pass
+
 
 
     def notify(self, event):
-        print("nope")
-        async_to_sync(self.send_json({'message': event.get("content")}))
+        if event.get("content") == DISCONNECTED_MSG:
+            self.disconnect({'message': event.get("content")})
+        else:
+            async_to_sync(self.send_json({'message': event.get("content")}))
+    
+    def disconnect(self, content):
+        try:
+            async_to_sync(self.channel_layer.group_discard)(
+                self.user_room_name,
+                self.channel_name
+            )
+        except AttributeError:
+            print(AttributeError.__str__)
+        raise StopConsumer()

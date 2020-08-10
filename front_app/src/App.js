@@ -31,7 +31,7 @@ setLoggedIn = (logged_in) =>{
     super(props);
     this.state = {
     logged_in: false,
-    status: 'login',
+    status: 'DISCONNECTED',
   };
   
     axios.post(logged_in_check_url)
@@ -48,28 +48,27 @@ setLoggedIn = (logged_in) =>{
 
 }
 setStatus = (status)=>{
-  this.setState({status: status})
+  console.log("************ changng to:",status);
+  this.setState({status: status});
 }
   render() {
     return (
       <div className="App">
         <h3 style={{marginTop: "1%"}}><span class={dot_class[this.state.status]}></span>
-            {this.state.status == "login" && "Login or register"}
-            {this.state.status == "logged_in" && "Edit user details"}
-            {this.state.status == "changed" && "User details have been set"}
-            {this.state.status == "changing" && "Sending details to server"}
+            {this.state.status == "DISCONNECTED" && "Login or register"}
+            {this.state.status == "CONNECTED" && "Edit user details"}
+            {this.state.status == "CHANGED_DETAILS" && "User details have been set"}
             </h3>
-       {!this.state.logged_in && <LoginForm setLoggedIn={this.setLoggedIn} setStatus={this.setStatus}/>}
-       {this.state.logged_in && <div><WebsocketComponent/><Profile setLoggedIn={this.setLoggedIn} setStatus={this.setStatus}/></div>}
+       {!this.state.logged_in && <LoginForm setLoggedIn={this.setLoggedIn} />}
+       {this.state.logged_in && <div><WebsocketComponent setStatus={this.setStatus}/><Profile setLoggedIn={this.setLoggedIn}/></div>}
       </div>
     );
   }
 }
 
 const dot_class = {
-  "login": "greyDot",
-  "logged_in": "greenDot",
-  "changed": "blueDot",
-  "changing": "yellowDot"
+  "DISCONNECTED": "greyDot",
+  "CONNECTED": "greenDot",
+  "CHANGED_DETAILS": "blueDot",
 }
 export default App;

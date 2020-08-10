@@ -24,10 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'o$iq*!%s%ch@r(zzxeqdr1p%scf=n)*e39xqq_+)o&p$yg^!u0'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['django-assess-task.herokuapp.com', "localhost"]
 
 
 # Application definition

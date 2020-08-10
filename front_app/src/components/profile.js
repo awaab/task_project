@@ -43,12 +43,10 @@ class Profile extends React.Component {
   event.target.phone.value="";
   event.target.age.value="";
   event.target.email.value="";
-  this.props.setStatus("changing");
   axios.post(submit_data_url, data)
   .then(response => {
   console.log(response);
   this.setUserdata(response.data);
-  this.props.setStatus("changed");
 });
  }
   handleLogout = (event) =>{
@@ -57,7 +55,6 @@ class Profile extends React.Component {
       .then(response => {
       console.log(response);
       this.props.setLoggedIn(false);
-      this.props.setStatus("login");
   });
     }
     checkLoggedin = (event) =>{

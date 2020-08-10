@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { type } from 'jquery';
 
 const socketPath = 'ws://' + window.location.host + "/ws/status/";
 //const socketPath = 'ws://echo.websocket.org/';
@@ -11,17 +12,20 @@ setupWebSocket = () =>{
     this.ws = new WebSocket(socketPath);
     this.ws.onopen = () => {
         console.log('ws connected');
+        this.props.setStatus("CONNECTED");
         this.ws.send(JSON.stringify({abcd:"abcd"}));
       }
   
       this.ws.onmessage = (evt) => {
-        const message = evt.data;
-        console.log(message);
+        const data = JSON.parse(evt.data);
+        this.props.setStatus(data.message);
+        console.log(typeof(data));
       }
   
       this.ws.onclose = () => {
+        this.props.setStatus("DISCONNECTED");
         console.log('Disconnected, trying to reconnect.')
-        setTimeout(this.setupWebSocket, 1000);
+        setTimeout(this.setupWebSocket, 2000);
       }
 }
     
