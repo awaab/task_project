@@ -8,6 +8,9 @@ class WebsocketComponent extends Component {
 constructor(props){
    super(props);
 }
+refreshDisplay = () =>{
+    this.props.setStatus("CONNECTED");
+}
 setupWebSocket = () =>{
     this.ws = new WebSocket(socketPath);
     this.ws.onopen = () => {
@@ -19,7 +22,7 @@ setupWebSocket = () =>{
         const data = JSON.parse(evt.data);
         this.props.setStatus(data.message);
         // Remove message and display default
-        setTimeout(function(){this.props.setStatus("CONNECTED");}, 2000);
+        setTimeout(this.refreshDisplay, 2000);
       }
   
       this.ws.onclose = () => {
