@@ -18,9 +18,8 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
-
     path('', include('task_app.urls')),
 ]
 
 if settings.ADMIN_ENABLED:
-    urlpatterns += path('admin/', admin.site.urls)
+    urlpatterns.append(path('admin/', admin.site.urls))
