@@ -1,1 +1,1 @@
-web: gunicorn task_project.wsgi --log-file -
+web: daphne task_project.asgi:application --port $PORT --bind 0.0.0.0
