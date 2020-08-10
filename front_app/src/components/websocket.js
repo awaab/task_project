@@ -19,7 +19,7 @@ setupWebSocket = () =>{
         const data = JSON.parse(evt.data);
         this.props.setStatus(data.message);
         // Remove message and display default
-        setTimeout(this.props.setStatus("CONNECTED"), 2000);
+        setTimeout(function(){this.props.setStatus("CONNECTED");}, 2000);
       }
   
       this.ws.onclose = () => {
