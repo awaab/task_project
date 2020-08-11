@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { type } from 'jquery';
 
-const socketPath = 'wss://' + window.location.host + "/ws/status/";
+const socketPath = 'ws://' + window.location.host + "/ws/status/";
 //const socketPath = 'ws://echo.websocket.org/';
 
 class WebsocketComponent extends Component {
@@ -27,8 +27,11 @@ setupWebSocket = () =>{
   
       this.ws.onclose = () => {
         this.props.setStatus("DISCONNECTED");
+        if(this.props.loggedIn()){
+          console.log("this.props.loggedIn",this.props.loggedIn);
         console.log('Disconnected, trying to reconnect.')
         setTimeout(this.setupWebSocket, 2000);
+        }
       }
 }
     

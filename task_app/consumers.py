@@ -34,5 +34,5 @@ class StatusConsumer(AsyncJsonWebsocketConsumer):
                 self.channel_name
             )
         except AttributeError:
-            print(AttributeError.__str__)
+            pass
         await self.close()

@@ -46,6 +46,9 @@ setLoggedIn = (logged_in) =>{
 setStatus = (status)=>{
   this.setState({status: status});
 }
+loggedIn = () => {
+  return this.state.logged_in
+}
   render() {
     return (
       <div className="App">
@@ -55,7 +58,7 @@ setStatus = (status)=>{
             {this.state.status == "CHANGED_DETAILS" && "User details have been set"}
             </h3>
        {!this.state.logged_in && <LoginForm setLoggedIn={this.setLoggedIn} />}
-       {this.state.logged_in && <div><WebsocketComponent setStatus={this.setStatus}/><Profile setLoggedIn={this.setLoggedIn}/></div>}
+       {this.state.logged_in && <div><WebsocketComponent loggedIn={this.loggedIn} setStatus={this.setStatus}/><Profile setLoggedIn={this.setLoggedIn}/></div>}
       </div>
     );
   }
